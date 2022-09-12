@@ -15,5 +15,5 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-- name: arduino/arduino-lint-action
+  name: arduino/arduino-lint-action
   uses: arduino/arduino-lint-action@v1.0.1
