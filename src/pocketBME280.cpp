@@ -12,8 +12,8 @@
 //Constructor -- Specifies default configuration
 pocketBME280::pocketBME280(void) {
   //Construct with these default settings
-  I2CAddress = 0x76;    // Default, jumper open is 0x77
-  sensorPort = &Wire;   //Default to Wire port
+  _i2CAddress = 0x76;    // Default, jumper open is 0x77
+  _sensorPort = &Wire;   //Default to Wire port
 }
 
 
@@ -61,7 +61,7 @@ uint8_t pocketBME280::begin() {
 
 //Begin comm with BME280 over I2C
 uint8_t pocketBME280::begin(TwoWire &wirePort) {
-  sensorPort = &wirePort;
+  _sensorPort = &wirePort;
 
   uint8_t chipID = begin(); // start normal handling
 
@@ -70,7 +70,7 @@ uint8_t pocketBME280::begin(TwoWire &wirePort) {
 
 
 void pocketBME280::setAddress(uint8_t newAddress) {
-  I2CAddress = newAddress;
+  _i2CAddress = newAddress;
 }
 
 //Reset sensor. Need to call .begin() afterwards
@@ -92,8 +92,8 @@ uint32_t pocketBME280::compensateTemperature(int32_t adc_T) {
 
   var1 = ((((adc_T >> 3) - ((int32_t)compensation.dig_T1 << 1))) * ((int32_t)compensation.dig_T2)) >> 11;
   var2 = (((((adc_T >> 4) - ((int32_t)compensation.dig_T1)) * ((adc_T >> 4) - ((int32_t)compensation.dig_T1))) >> 12) * ((int32_t)compensation.dig_T3)) >> 14;
-  t_fine = var1 + var2;
-  T = (t_fine * 5 + 128) >> 8;
+  _t_fine = var1 + var2;
+  T = (_t_fine * 5 + 128) >> 8;
 
   return T;
 }
@@ -101,10 +101,10 @@ uint32_t pocketBME280::compensateTemperature(int32_t adc_T) {
 // wrapper function for usability
 uint32_t pocketBME280::getTemperature(void) {
 
-  if (t_fine == UINT32_MAX) {
+  if (_t_fine == UINT32_MAX) {
     readBurst();  // read out sensor
   }
-  int32_t adc_T = ((uint32_t)burstBuffer[3] << 12) | ((uint32_t)burstBuffer[4] << 4) | ((burstBuffer[5] >> 4) & 0x0F);
+  int32_t adc_T = ((uint32_t)_burstBuffer[3] << 12) | ((uint32_t)_burstBuffer[4] << 4) | ((_burstBuffer[5] >> 4) & 0x0F);
   return compensateTemperature(adc_T);  // Output value of "5123" equals to 51.23 DegC
 }
 
@@ -120,7 +120,7 @@ uint32_t pocketBME280::compensatePressure(int32_t adc_P) {
 
   int32_t var1, var2;
   uint32_t p;
-  var1 = (((int32_t)t_fine) >> 1) - (int32_t)64000;
+  var1 = (((int32_t)_t_fine) >> 1) - (int32_t)64000;
   var2 = (((var1 >> 2) * (var1 >> 2)) >> 11) * ((int32_t)compensation.dig_P6);
   var2 = var2 + ((var1 * ((int32_t)compensation.dig_P5)) << 1);
   var2 = (var2 >> 2) + (((int32_t)compensation.dig_P4) << 16);
@@ -145,11 +145,11 @@ uint32_t pocketBME280::compensatePressure(int32_t adc_P) {
 // wrapper function for usability
 uint32_t pocketBME280::getPressure(void) {
 
-  if (t_fine == UINT32_MAX) {
+  if (_t_fine == UINT32_MAX) {
     getTemperature();  // initialize t_fine
   }
 
-  int32_t adc_P = ((uint32_t)burstBuffer[0] << 12) | ((uint32_t)burstBuffer[1] << 4) | ((burstBuffer[2] >> 4) & 0x0F);
+  int32_t adc_P = ((uint32_t)_burstBuffer[0] << 12) | ((uint32_t)_burstBuffer[1] << 4) | ((_burstBuffer[2] >> 4) & 0x0F);
 
   return compensatePressure(adc_P);  // Output value of "96386" equals to 96386 Pa
 }
@@ -165,7 +165,7 @@ uint32_t pocketBME280::getPressure(void) {
 uint32_t pocketBME280::compensateHumidity(int32_t adc_H) {
 
   int32_t v_x1_u32r;
-  v_x1_u32r = (t_fine - ((int32_t)76800));
+  v_x1_u32r = (_t_fine - ((int32_t)76800));
   v_x1_u32r = (((((adc_H << 14) - (((int32_t)compensation.dig_H4) << 20) - (((int32_t)compensation.dig_H5) * v_x1_u32r)) + ((int32_t)16384)) >> 15) * (((((((v_x1_u32r * ((int32_t)compensation.dig_H6)) >> 10) * (((v_x1_u32r * ((int32_t)compensation.dig_H3)) >> 11) + ((int32_t)32768))) >> 10) + ((int32_t)2097152)) * ((int32_t)compensation.dig_H2) + 8192) >> 14));
   v_x1_u32r = (v_x1_u32r - (((((v_x1_u32r >> 15) * (v_x1_u32r >> 15)) >> 7) * ((int32_t)compensation.dig_H1)) >> 4));
   v_x1_u32r = (v_x1_u32r < 0 ? 0 : v_x1_u32r);
@@ -177,10 +177,10 @@ uint32_t pocketBME280::compensateHumidity(int32_t adc_H) {
 // wrapper function for usability
 uint32_t pocketBME280::getHumidity(void) {
 
-  if (t_fine == UINT32_MAX) {
+  if (_t_fine == UINT32_MAX) {
     getTemperature();  // initialize t_fine
   }
-  int32_t adc_H = ((uint32_t)burstBuffer[6] << 8) | ((uint32_t)burstBuffer[7]);
+  int32_t adc_H = ((uint32_t)_burstBuffer[6] << 8) | ((uint32_t)_burstBuffer[7]);
   return compensateHumidity(adc_H);  //Output value of “47445” represents 47445/1024 = 46. 333 %RH
 }
 
@@ -195,7 +195,7 @@ void pocketBME280::startMeasurement() {
   state |= MODE_FORCED;             // start measurement, goes back to sleep automatically when finished
   writeRegister(BME280_CTRL_MEAS_REG, state);
 
-  t_fine = UINT32_MAX;  // set t_fine to invalid value
+  _t_fine = UINT32_MAX;  // set t_fine to invalid value
 }
 
 bool pocketBME280::isMeasuring() {
@@ -210,20 +210,20 @@ bool pocketBME280::isMeasuring() {
 //
 //****************************************************************************
 void pocketBME280::readBurst() {
-  uint8_t *writePointer = burstBuffer;
+  uint8_t *writePointer = _burstBuffer;
   uint8_t i = 0;
   uint8_t b = 0;
   static uint8_t numBytes = 8;
 
-  sensorPort->beginTransmission(I2CAddress);
-  sensorPort->write(BME280_MEASUREMENTS_REG);
-  sensorPort->endTransmission();
+  _sensorPort->beginTransmission(_i2CAddress);
+  _sensorPort->write(BME280_MEASUREMENTS_REG);
+  _sensorPort->endTransmission();
 
   // request measurement data from sensor
-  sensorPort->requestFrom(I2CAddress, numBytes);
-  while ((sensorPort->available()) && (i < numBytes)) {  // sensor may send less than requested
+  _sensorPort->requestFrom(_i2CAddress, numBytes);
+  while ((_sensorPort->available()) && (i < numBytes)) {  // sensor may send less than requested
 
-    b = sensorPort->read();  // receive a byte
+    b = _sensorPort->read();  // receive a byte
     *writePointer = b;
     writePointer++;
     i++;
@@ -235,13 +235,13 @@ uint8_t pocketBME280::readRegister(uint8_t pointer) {
 
   uint8_t result;
 
-  sensorPort->beginTransmission(I2CAddress);
-  sensorPort->write(pointer);
-  sensorPort->endTransmission();
+  _sensorPort->beginTransmission(_i2CAddress);
+  _sensorPort->write(pointer);
+  _sensorPort->endTransmission();
 
-  sensorPort->requestFrom(I2CAddress, (uint8_t)1);
-  if (sensorPort->available())
-    result = sensorPort->read();  // receive one byte
+  _sensorPort->requestFrom(_i2CAddress, (uint8_t)1);
+  if (_sensorPort->available())
+    result = _sensorPort->read();  // receive one byte
   else
     result = 0;
 
@@ -250,8 +250,8 @@ uint8_t pocketBME280::readRegister(uint8_t pointer) {
 
 void pocketBME280::writeRegister(uint8_t pointer, uint8_t value) {
 
-  sensorPort->beginTransmission(I2CAddress);
-  sensorPort->write(pointer);
-  sensorPort->write(value);
-  sensorPort->endTransmission();
+  _sensorPort->beginTransmission(_i2CAddress);
+  _sensorPort->write(pointer);
+  _sensorPort->write(value);
+  _sensorPort->endTransmission();
 }
