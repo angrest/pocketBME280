@@ -19,11 +19,11 @@ The library provides the functions
 1. `begin()` initialize the communication and sensor
 2. `setAddress(unit8_t address)` optionally set the I2C address of the sensor (default is `0x76`, you might try `setAddress(0x77)` if the sensor does not respond
 3. `reset()`reset sensor. Need to call `begin()` afterwards
-4. `startMeasurement()` kick off a measurement cycle. The sensor goes back to sleep automatically afterwards.
+4. `startMeasurement()` kick off a measurement cycle. The sensor goes back to sleep automatically thereafter.
 5. `bool isMeasuring()` returns `true` while a measurement is being performed.
-6. `uint32_t getTemperature()` returns temperature in units of 0.01 DegC. An output value of "5123" equals to 51.23 DegC
-7. `uint32_t getPressure()`returns pressure in Pa. An output value of "96386" equals to 96386 Pa (or 963.86 hPa)
-8. `uint32_t getHumidity()` returns humidty in Q22.10 format (22 integer and 10 fractional bits). An output value of “47445” equals to 47445/1024 = 46. 333 %RH
+6. `uint32_t getTemperature()` returns the temperature in units of 0.01 DegC. An output value of "5123" equals to 51.23 DegC
+7. `uint32_t getPressure()`returns the pressure in Pa. An output value of "96386" equals to 96386 Pa (or 963.86 hPa)
+8. `uint32_t getHumidity()` returns the humidity in Q22.10 format (22 integer and 10 fractional bits). An output value of “47445” equals to 47445/1024 = 46. 333 %RH
 The values for temperature, pressure and humidity are only read from the sensor once per measurement. Thus, subsequent calls to `getTemperature()` or the equivalents will return the same value until a new measurement is started. As for pressure and humidity calculations the temperature value is needed, `getTemperature()` should be called first (however, the library internally keeps track and sorts that out should you call the `get*()`-functions in a different order).
 
 A typical measurement in the `loop()`would look like this (the complete sketch is in the [example folder](examples/Simple/Simple.ino)):
