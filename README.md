@@ -12,7 +12,7 @@ The library implements an on-demand measurement using the "forced mode". This me
 - after about 10ms, the measurement is finished and the sensor goes back in sleep mode automatically
 - until next the next measurement is finished, the data can be read
 
-To calculate temperature, pressure and humidity from the raw sensor data the 32 bit algorithm given by Bosch in the data sheet is implemented. To save energy, no oversampling ("sinlgle") is used.
+To calculate temperature, pressure and humidity from the raw sensor data the 32 bit algorithm given by Bosch in the data sheet is implemented. To save energy, no oversampling ("single") is used.
 
 ## Programming
 The library provides the functions
