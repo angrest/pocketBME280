@@ -120,13 +120,13 @@ class pocketBME280 {
     // compensation values from sensor
     SensorCompensation compensation;
     // actual connectuion object to sensor
-    TwoWire *sensorPort = 0;
-    uint8_t I2CAddress = 0x76;
+    TwoWire *_sensorPort = 0;
+    uint8_t _i2CAddress = 0x76;
     // 8 bytes buffer for burst data
-    uint8_t burstBuffer[8];
+    uint8_t _burstBuffer[8];
 
     // internal global value used to calculate pressure and humidity
-    int32_t t_fine;
+    int32_t _t_fine;
     // actual calculation from raw data, resolving dependencies
     uint32_t compensateTemperature(int32_t adc_T);
     uint32_t compensatePressure(int32_t adc_P);
