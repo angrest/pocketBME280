@@ -1,8 +1,8 @@
 # pocketBME280
 
 ## Description
-This library provides a compact option to read out data from a BME280 sensor to be used for weather monitoring in Arduino projects. To be most compatible, only 32bit integer arithmetics is used internally. Floating point values can be easily derived in the Arduino sketch.
-The sensor settings and compesnation formula follow the recommendations from Bosch given in the [BME280](https://www.bosch-sensortec.com/products/environmental-sensors/humidity-sensors-bme280/) [datasheet](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf).
+This library provides a compact option to read out data from a BME280 sensor via I2C. It is optimised to be used for weather monitoring in Arduino projects. To be most compatible, only 32bit integer arithmetics is used internally. Floating point values can be easily derived in the Arduino sketch.
+The sensor settings and compensation formula follow the recommendations from Bosch given in the [BME280](https://www.bosch-sensortec.com/products/environmental-sensors/humidity-sensors-bme280/) [datasheet](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf).
 
 ## Basic function
 The library implements an on-demand measurement using the "forced mode". This means:
@@ -16,7 +16,7 @@ To calculate temperature, pressure and humidity from the raw sensor data the 32 
 
 ## Programming
 The library provides the functions
-1. `begin()` initialize the communication and sensor. Returns `true` if a BME280 or BMP280 sensor is found.
+1. `begin()` initialize the communication and sensor. Returns `true` if a BME280 or BMP280 sensor is found. Optionally, you can provide your own `TwoWire` instance to be used: `begin(TwoWire &wirePort)`. The latter makes most sense if you do not use standard I2C ports on the ESP-Plattform. 
 2. `setAddress(unit8_t address)` optionally set the I2C address of the sensor (default is `0x76`, you might try `setAddress(0x77)` if the sensor does not respond
 3. `reset()`reset sensor. Need to call `begin()` afterwards
 4. `startMeasurement()` kick off a measurement cycle. The sensor goes back to sleep automatically thereafter.
@@ -53,6 +53,6 @@ void loop() {
 ```
 
 **Important:** 
-- The sensor will actually need a few millis before `isMeasuring()` returns `true`. In the above example, the meassage is printed once on an Arduino Pro mini. On other boards, this may differ.
-- If you call the `get*()`-functions before the measurement is finished, the sensor will return the data from the last measurement which was finished. This may or may not be important, depending on the time between subsequent measurements.
+- The sensor will actually need a few millis before `isMeasuring()` returns `true`. In the above example, the meassage is printed once on an Arduino Pro Mini. On other boards, this may differ.
+- If you call the `get*()`-functions before the measurement is finished, the sensor will return the data from the last previous measurement which was finished. This may or may not be important, depending on the time between subsequent measurements.
 - `get*()` will return the same values until the next time `startMeasurement()` is called (and the measurement is finished!).
