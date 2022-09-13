@@ -104,8 +104,8 @@ class pocketBME280 {
 
     //Call to apply BME280_SensorSettings.
     //This also gets the SensorCompensation constants
-    uint8_t begin(void); // returns the chip ID. OK if 0x60 (BME) or 0x58 (BMP)
-    uint8_t begin(TwoWire &wirePort); // Called when user provides Wire port
+    bool begin(void); // returns true if chipID is 0x60 (BME) or 0x58 (BMP)
+    bool begin(TwoWire &wirePort); // Called when user provides Wire port
     void setAddress(uint8_t newAddress); // Set the address to be used to communicate. Use if address jumper is open (0x77).
     void reset(void); // Software reset of the sensor
 
