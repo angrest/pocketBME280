@@ -22,13 +22,13 @@ pocketBME280::pocketBME280(void) {
 //  Configuration section
 //
 //****************************************************************************//
-uint8_t pocketBME280::begin() {
+bool pocketBME280::begin() {
   delay(2);  //Make sure sensor had enough time to turn on. BME280 requires 2ms to start up.
 
   //Check communication with IC before anything else
   uint8_t chipID = readRegister(BME280_CHIP_ID_REG);  //Should return 0x60 or 0x58
   if (chipID != 0x58 && chipID != 0x60)               // Is this BMP or BME?
-    return (chipID);                                  //This is not BMP nor BME!
+    return (chipID==0x58)||(chipID==0x60);            //This is not BMP nor BME!
 
   //Reading all compensation data, range 0x88:A1, 0xE1:E7
   compensation.dig_T1 = ((uint16_t)((readRegister(BME280_DIG_T1_MSB_REG) << 8) + readRegister(BME280_DIG_T1_LSB_REG)));
@@ -56,16 +56,14 @@ uint8_t pocketBME280::begin() {
   writeRegister(BME280_CTRL_MEAS_REG, (1 << 5) | (1 << 2) | MODE_SLEEP);  // enable temperature and pressure measurement, activate humidity measurement
 
 
-  return (chipID);  //Should return 0x60 or 0x58
+  return (chipID==0x58)||(chipID==0x60);
 }
 
 //Begin comm with BME280 over I2C
-uint8_t pocketBME280::begin(TwoWire &wirePort) {
+bool pocketBME280::begin(TwoWire &wirePort) {
   _sensorPort = &wirePort;
 
-  uint8_t chipID = begin(); // start normal handling
-
-  return (chipID);  //Should return 0x60 or 0x58
+  return begin();
 }
 
 

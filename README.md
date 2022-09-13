@@ -16,7 +16,7 @@ To calculate temperature, pressure and humidity from the raw sensor data the 32 
 
 ## Programming
 The library provides the functions
-1. `begin()` initialize the communication and sensor
+1. `begin()` initialize the communication and sensor. Returns `true` if a BME280 or BMP280 sensor is found.
 2. `setAddress(unit8_t address)` optionally set the I2C address of the sensor (default is `0x76`, you might try `setAddress(0x77)` if the sensor does not respond
 3. `reset()`reset sensor. Need to call `begin()` afterwards
 4. `startMeasurement()` kick off a measurement cycle. The sensor goes back to sleep automatically thereafter.
