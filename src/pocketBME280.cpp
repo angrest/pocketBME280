@@ -12,8 +12,8 @@
 //Constructor -- Specifies default configuration
 pocketBME280::pocketBME280(void) {
   //Construct with these default settings
-  _i2CAddress = 0x76;    // Default, jumper open is 0x77
-  _sensorPort = &Wire;   //Default to Wire port
+  _i2CAddress = 0x76;   // Default, jumper open is 0x77
+  _sensorPort = &Wire;  //Default to Wire port
 }
 
 
@@ -25,10 +25,15 @@ pocketBME280::pocketBME280(void) {
 bool pocketBME280::begin() {
   delay(2);  //Make sure sensor had enough time to turn on. BME280 requires 2ms to start up.
 
+  _t_fine = INT32_MAX;
+  _temperature = UINT32_MAX;
+  _pressure = UINT32_MAX;
+  _humidity = UINT32_MAX;
+
   //Check communication with IC before anything else
   uint8_t chipID = readRegister(BME280_CHIP_ID_REG);  //Should return 0x60 or 0x58
   if (chipID != 0x58 && chipID != 0x60)               // Is this BMP or BME?
-    return (chipID==0x58)||(chipID==0x60);            //This is not BMP nor BME!
+    return (chipID == 0x58) || (chipID == 0x60);      //This is not BMP nor BME!
 
   //Reading all compensation data, range 0x88:A1, 0xE1:E7
   compensation.dig_T1 = ((uint16_t)((readRegister(BME280_DIG_T1_MSB_REG) << 8) + readRegister(BME280_DIG_T1_LSB_REG)));
@@ -55,8 +60,7 @@ bool pocketBME280::begin() {
   writeRegister(BME280_CTRL_HUMIDITY_REG, 1);                             // enable measurement of humitidity
   writeRegister(BME280_CTRL_MEAS_REG, (1 << 5) | (1 << 2) | MODE_SLEEP);  // enable temperature and pressure measurement, activate humidity measurement
 
-
-  return (chipID==0x58)||(chipID==0x60);
+  return (chipID == 0x58) || (chipID == 0x60);
 }
 
 //Begin comm with BME280 over I2C
@@ -72,7 +76,7 @@ void pocketBME280::setAddress(uint8_t newAddress) {
 }
 
 //Reset sensor. Need to call .begin() afterwards
-void pocketBME280::reset( void ) {
+void pocketBME280::reset(void) {
   writeRegister(BME280_RST_REG, 0xB6);
 }
 
@@ -99,11 +103,14 @@ uint32_t pocketBME280::compensateTemperature(int32_t adc_T) {
 // wrapper function for usability
 uint32_t pocketBME280::getTemperature(void) {
 
-  if (_t_fine == UINT32_MAX) {
+  if (_t_fine == INT32_MAX) {
     readBurst();  // read out sensor
   }
-  int32_t adc_T = ((uint32_t)_burstBuffer[3] << 12) | ((uint32_t)_burstBuffer[4] << 4) | ((_burstBuffer[5] >> 4) & 0x0F);
-  return compensateTemperature(adc_T);  // Output value of "5123" equals to 51.23 DegC
+  if (_temperature == UINT32_MAX) {
+    int32_t adc_T = ((uint32_t)_burstBuffer[3] << 12) | ((uint32_t)_burstBuffer[4] << 4) | ((_burstBuffer[5] >> 4) & 0x0F);
+    _temperature = compensateTemperature(adc_T);  // Output value of "5123" equals to 51.23 DegC
+  }
+  return _temperature;
 }
 
 //****************************************************************************
@@ -143,13 +150,15 @@ uint32_t pocketBME280::compensatePressure(int32_t adc_P) {
 // wrapper function for usability
 uint32_t pocketBME280::getPressure(void) {
 
-  if (_t_fine == UINT32_MAX) {
+  if (_t_fine == INT32_MAX) {
     getTemperature();  // initialize t_fine
   }
 
-  int32_t adc_P = ((uint32_t)_burstBuffer[0] << 12) | ((uint32_t)_burstBuffer[1] << 4) | ((_burstBuffer[2] >> 4) & 0x0F);
-
-  return compensatePressure(adc_P);  // Output value of "96386" equals to 96386 Pa
+  if (_pressure == UINT32_MAX) {
+    int32_t adc_P = ((uint32_t)_burstBuffer[0] << 12) | ((uint32_t)_burstBuffer[1] << 4) | ((_burstBuffer[2] >> 4) & 0x0F);
+    _pressure = compensatePressure(adc_P);  // Output value of "96386" equals to 96386 Pa
+  }
+  return _pressure;
 }
 
 //****************************************************************************//
@@ -175,11 +184,14 @@ uint32_t pocketBME280::compensateHumidity(int32_t adc_H) {
 // wrapper function for usability
 uint32_t pocketBME280::getHumidity(void) {
 
-  if (_t_fine == UINT32_MAX) {
+  if (_t_fine == INT32_MAX) {
     getTemperature();  // initialize t_fine
   }
-  int32_t adc_H = ((uint32_t)_burstBuffer[6] << 8) | ((uint32_t)_burstBuffer[7]);
-  return compensateHumidity(adc_H);  //Output value of “47445” represents 47445/1024 = 46. 333 %RH
+  if (_humidity == UINT32_MAX) {
+    int32_t adc_H = ((uint32_t)_burstBuffer[6] << 8) | ((uint32_t)_burstBuffer[7]);
+    _humidity = compensateHumidity(adc_H);  //Output value of “47445” represents 47445/1024 = 46. 333 %RH
+  }
+  return _humidity;
 }
 
 //****************************************************************************
@@ -193,7 +205,10 @@ void pocketBME280::startMeasurement() {
   state |= MODE_FORCED;             // start measurement, goes back to sleep automatically when finished
   writeRegister(BME280_CTRL_MEAS_REG, state);
 
-  _t_fine = UINT32_MAX;  // set t_fine to invalid value
+  _t_fine = INT32_MAX;  // set t_fine to invalid value
+  _temperature = UINT32_MAX;
+  _pressure = UINT32_MAX;
+  _humidity = UINT32_MAX;
 }
 
 bool pocketBME280::isMeasuring() {
@@ -226,7 +241,6 @@ void pocketBME280::readBurst() {
     writePointer++;
     i++;
   }
-
 }
 
 uint8_t pocketBME280::readRegister(uint8_t pointer) {
