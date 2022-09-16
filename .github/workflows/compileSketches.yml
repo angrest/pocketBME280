@@ -24,7 +24,7 @@ jobs:
             - name: "esp32:esp32:esp32s3"
             # Install the platform from the root of the repository, replacing the BM installed platform
             - source-url: "https://dl.espressif.com/dl/package_esp32_index.json"
-            name: "esp32:esp32:esp32s3"
+            name: "esp32:esp32"
           fqbn: "esp32:esp32:esp32s3"
           sketch-paths: |
             ./examples/ESP
