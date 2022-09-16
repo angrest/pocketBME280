@@ -19,8 +19,8 @@ jobs:
         uses: arduino/compile-sketches@v1
         with:
           platforms: |
-            - name "esp32:esp32"
-              source-url: "https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json"
+            - name esp32:esp32
+              source-url: https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
           # The default is to compile for the Arduino Uno board. If you want to compile for other boards, use the `fqbn` input.            
           fqbn: 'esp32:esp32:esp32s3'
           sketch-paths: |
