@@ -22,7 +22,7 @@ jobs:
           platforms: |
             # Install the latest release of ESP32 Boards and its toolchain via Boards Manager
             - source-url: 'https://dl.espressif.com/dl/package_esp32_index.json'
-            - name 'esp32:esp32'
+            # - name 'esp32:esp32'
           fqbn: 'esp32:esp32:esp32s3'
           sketch-paths: |
             ./examples/ESP
