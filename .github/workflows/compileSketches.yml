@@ -15,12 +15,16 @@ jobs:
         uses: actions/checkout@v2
 
       # For more information: https://github.com/arduino/compile-sketches#readme
-      - name: Compile sketch
+      - name: Compile sketches
         uses: arduino/compile-sketches@v1
         with:
           # The default is to compile for the Arduino Uno board. If you want to compile for other boards, use the `fqbn` input.
-          fqbn: 'esp32:esp32:esp32s3'
-          # sketch-paths: |
-          #  ./examples/Simple
-          #  ./examples/IntMath
-          #  ./examples/ESP
+          platforms: |
+          # Install the latest release of Arduino SAMD Boards and its toolchain via Boards Manager
+          - name: "esp32:esp32:esp32s3"
+          # Install the platform from the root of the repository, replacing the BM installed platform
+          - source-url: "https://dl.espressif.com/dl/package_esp32_index.json"
+          name: "esp32:esp32:esp32s3"
+          fqbn: "esp32:esp32:esp32s3"
+          sketch-paths: |
+            ./examples/ESP
