@@ -22,8 +22,7 @@ jobs:
           platforms: |
             # Install the latest release of ESP32 Boards and its toolchain via Boards Manager
             - name: "esp32:esp32"
-            - source-url: "https://dl.espressif.com/dl/package_esp32_index.json"
-              name: "esp32:esp32"
+            - source-url: "https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json"
             
           fqbn: 'esp32:esp32:esp32s3'
           sketch-paths: |
