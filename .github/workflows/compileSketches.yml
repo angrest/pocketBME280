@@ -14,22 +14,34 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # For more information: https://github.com/arduino/compile-sketches#readme
-      - name: Compile sketches Arduino
+      # Standard target Arduino Uno
+      - name: Compile sketches for Arduino
         uses: arduino/compile-sketches@v1
         with:
           sketch-paths: |
             ./examples/Simple
             ./examples/IntMath
             ./examples/ESP
-      # For more information: https://github.com/arduino/compile-sketches#readme
-      - name: Compile sketches ESP32
+      # Second test for ESP specific branches in ESP example
+      - name: Compile sketches for ESP32
         uses: arduino/compile-sketches@v1
         with:
           platforms: |
             - name: esp32:esp32
               source-url: https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
-          # The default is to compile for the Arduino Uno board. If you want to compile for other boards, use the `fqbn` input.            
+          # Compile target ESP32 dev kit
           fqbn: 'esp32:esp32:esp32s3'
           sketch-paths: |
             ./examples/ESP
+      # Third round of tests for ATTiny
+      - name: Compile sketches for ATTiny
+        uses: arduino/compile-sketches@v1
+        with:
+          platforms: |
+            - name: ATTinyCore:avr
+              source-url: http://drazzy.com/package_drazzy.com_index.json
+          # compile target ATtiny25/45/85 (No bootloader)            
+          fqbn: 'ATTinyCore:avr:attinyx5'
+          sketch-paths: |
+            ./examples/Simple
+            ./examples/IntMath
