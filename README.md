@@ -1,7 +1,5 @@
 # pocketBME280
 
-**Attention: unfortunately, the Library Manager proposes due to a mistake version 2.3.1 as latest version. This is, however, a pre-release version. Please use version 1.2.1 and ignore update requests to 2.3.1 from the library manager for now.**
-
 ## Description
 This library provides a compact option to read out data from a BME280 sensor via I2C. It is optimised to be used for weather monitoring in Arduino projects. To be most compatible, only 32bit integer arithmetics is used internally. Floating point values can be easily derived in the Arduino sketch.
 The sensor settings and compensation formula follow the recommendations from Bosch given in the [BME280](https://www.bosch-sensortec.com/products/environmental-sensors/humidity-sensors-bme280/) [datasheet](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf).
