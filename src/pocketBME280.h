@@ -3,13 +3,7 @@
 
 #include <limits.h>
 #include <stdint.h>
-
-#if (ARDUINO >= 100)
 #include "Arduino.h"
-#else
-#include "WProgram.h"
-#endif
-
 #include <Wire.h>
 
 // sensor modes
@@ -112,7 +106,7 @@ class pocketBME280 {
     void startMeasurement(void);  // start measuerment cycle
     bool isMeasuring(void);       // Returns true while the device is taking measurement
 
-    uint32_t getTemperature(void);  // Output value of "5123" equals to 51.23 DegC
+    int32_t getTemperature(void);   // Output value of "5123" equals to 51.23 DegC
     uint32_t getPressure(void);     // Output value of "96386" equals to 96386 Pa
     uint32_t getHumidity(void);     // Output value of “47445” represents 47445/1024 = 46. 333 %RH
 
@@ -128,12 +122,12 @@ class pocketBME280 {
     // internal global value used to calculate pressure and humidity
     int32_t _t_fine;
     // cache values to spare computing time on subsequent gt-calls
-    uint32_t _temperature;
+    int32_t _temperature;
     uint32_t _pressure;
     uint32_t _humidity;
 
     // actual calculation from raw data, resolving dependencies
-    uint32_t compensateTemperature(int32_t adc_T);
+    int32_t compensateTemperature(int32_t adc_T);
     uint32_t compensatePressure(int32_t adc_P);
     uint32_t compensateHumidity(int32_t adc_H);
     // readBurst takes a uint8 array address as input and reads the sensor data in this array

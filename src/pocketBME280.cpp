@@ -88,7 +88,7 @@ void pocketBME280::reset(void) {
 //  Data Sheet chapter 4.2.3
 //
 //****************************************************************************
-uint32_t pocketBME280::compensateTemperature(int32_t adc_T) {
+int32_t pocketBME280::compensateTemperature(int32_t adc_T) {
 
   int32_t var1, var2, T;
 
@@ -101,7 +101,7 @@ uint32_t pocketBME280::compensateTemperature(int32_t adc_T) {
 }
 
 // wrapper function for usability
-uint32_t pocketBME280::getTemperature(void) {
+int32_t pocketBME280::getTemperature(void) {
 
   if (_t_fine == INT32_MAX) {
     readBurst();  // read out sensor
