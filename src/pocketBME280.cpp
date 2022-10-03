@@ -26,7 +26,7 @@ bool pocketBME280::begin() {
   delay(2);  //Make sure sensor had enough time to turn on. BME280 requires 2ms to start up.
 
   _t_fine = INT32_MAX;
-  _temperature = UINT32_MAX;
+  _temperature = INT32_MAX;
   _pressure = UINT32_MAX;
   _humidity = UINT32_MAX;
 
@@ -106,7 +106,7 @@ int32_t pocketBME280::getTemperature(void) {
   if (_t_fine == INT32_MAX) {
     readBurst();  // read out sensor
   }
-  if (_temperature == UINT32_MAX) {
+  if (_temperature == INT32_MAX) {
     int32_t adc_T = ((uint32_t)_burstBuffer[3] << 12) | ((uint32_t)_burstBuffer[4] << 4) | ((_burstBuffer[5] >> 4) & 0x0F);
     _temperature = compensateTemperature(adc_T);  // Output value of "5123" equals to 51.23 DegC
   }
@@ -206,7 +206,7 @@ void pocketBME280::startMeasurement() {
   writeRegister(BME280_CTRL_MEAS_REG, state);
 
   _t_fine = INT32_MAX;  // set t_fine to invalid value
-  _temperature = UINT32_MAX;
+  _temperature = INT32_MAX;
   _pressure = UINT32_MAX;
   _humidity = UINT32_MAX;
 }
