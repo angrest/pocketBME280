@@ -2,10 +2,10 @@
 
 ## Description
 This library provides a compact option to read out data from a BME280 sensor via I2C. It is designed to be used for weather monitoring in Arduino projects. To optimize size and compatibility, internal arithmetics is based entirely on 32bit integers. If floating point values are required, they can easily be calculated as shown in the [IntMath example](examples/IntMath/IntMath.ino).
-The sensor settings and compensation formulae follow the recommendations from Bosch given in the [BME280](https://www.bosch-sensortec.com/products/environmental-sensors/humidity-sensors-bme280/) [datasheet](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf) section 4.2.3 and 8.2. 
+The sensor settings and compensation formulae follow the recommendations from Bosch given in the [BME280](https://www.bosch-sensortec.com/products/environmental-sensors/humidity-sensors-bme280/) [datasheet](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bme280-ds002.pdf) section 3.5.1 for the settings and 4.2.3 as well as 8.2 for the compensation algorithms. 
 
 ## Basic function
-The library implements an on-demand measurement using the "forced mode". This means:
+The library implements an on-demand measurement using the "forced mode" (section 3.3 in the datasheet). This means:
 
 - by default the sensor is in sleep mode using very little power
 - if needed a measurement cycle is started
