@@ -1,7 +1,7 @@
 pocketBME280	KEYWORD1
 begin	KEYWORD2
-reset KEYWORD2
-setAddress  KEYWORD2
+reset	KEYWORD2
+setAddress	KEYWORD2
 startMeasurement	KEYWORD2
 isMeasuring	KEYWORD2
 getTemperature	KEYWORD2
