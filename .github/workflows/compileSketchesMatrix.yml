@@ -58,6 +58,7 @@ jobs:
       # dynamically by the build matrix.
       - name: Install platform
         run: |
+          arduino-cli config set library.enable_unsafe_install true
           arduino-cli core install ${{ matrix.arduino-platform }} --additional-urls ${{ matrix.source-url }}
           arduino-cli core update-index
           arduino-cli lib install --git-url https://github.com/pocketBME280.git
