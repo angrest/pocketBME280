@@ -43,11 +43,17 @@ jobs:
     # This is the platform GitHub will use to run our workflow
     runs-on: ubuntu-latest
 
+    env:
+      # Location of the repository relative to the runner workspace
+      REPO_PATH: libraries/pocketBME280
+
     # This is the list of steps this job will run.
     steps:
       # First of all, we clone the repo using the `checkout` action.
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          path: ${{ env.REPO_PATH }}
 
       # We use the `arduino/setup-arduino-cli` action to install and
       # configure the Arduino CLI on the system.
@@ -58,17 +64,17 @@ jobs:
       # dynamically by the build matrix.
       - name: Install platform
         run: |
-          arduino-cli config set library.enable_unsafe_install true
           arduino-cli core install ${{ matrix.arduino-platform }} --additional-urls ${{ matrix.source-url }}
           arduino-cli core update-index
-          arduino-cli lib install --git-url https://github.com/pocketBME280.git
-          
 
       # Finally, we compile the sketch, using the FQBN that was set
       # in the build matrix.
       - name: Compile Sketch
+        env:
+          # Configure Arduino CLI so this repository checked out under the libraries subfolder will be recognized
+          ARDUINO_DIRECTORIES_USER: ${{ github.workspace }}
         run: |
-          arduino-cli compile --fqbn ${{ matrix.fqbn }} ./examples/Simple
-          arduino-cli compile --fqbn ${{ matrix.fqbn }} ./examples/IntMath
-          arduino-cli compile --fqbn ${{ matrix.fqbn }} ./examples/ESP
+          arduino-cli compile --fqbn ${{ matrix.fqbn }} ${{ env.REPO_PATH }}/examples/Simple
+          arduino-cli compile --fqbn ${{ matrix.fqbn }} ${{ env.REPO_PATH }}/examples/IntMath
+          arduino-cli compile --fqbn ${{ matrix.fqbn }} ${{ env.REPO_PATH }}/examples/ESP
 
