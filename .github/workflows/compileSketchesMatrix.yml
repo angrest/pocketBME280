@@ -20,7 +20,7 @@ jobs:
         # The matrix will produce one job for each configuration
         # parameter of type `arduino-platform`, in this case a
         # total of 2.
-        arduino-platform: ["arduino:samd", "arduino:avr", "ATTinyCore:avr"]
+        arduino-platform: ["arduino:avr", "esp32:esp32", "ATTinyCore:avr"]
         # This is usually optional but we need to statically define the
         # FQBN of the boards we want to test for each platform. In the
         # future the CLI might automatically detect and download the core
@@ -31,6 +31,7 @@ jobs:
           # variable `fqbn` is set to "arduino:samd:nano_33_iot".
           - arduino-platform: "arduino:avr"
             fqbn: "arduino:avr:uno"
+            # this does not contain the boards we use, but how to make a parameter in the matrix step optional?
             source-url: https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
           - arduino-platform: "esp32:esp32"
             fqbn: "esp32:esp32:esp32s3"
