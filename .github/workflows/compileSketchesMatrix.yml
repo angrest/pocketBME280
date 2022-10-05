@@ -58,8 +58,8 @@ jobs:
       # dynamically by the build matrix.
       - name: Install platform
         run: |
-          arduino-cli core update-index
           arduino-cli core install ${{ matrix.arduino-platform }} --additional-urls ${{ matrix.source-url }}
+          arduino-cli core update-index
 
       # Finally, we compile the sketch, using the FQBN that was set
       # in the build matrix.
