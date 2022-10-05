@@ -1,5 +1,5 @@
 # This is the name of the workflow, visible on GitHub UI.
-name: test
+name: Test
 
 # Here we tell GitHub to run the workflow when a commit
 # is pushed or a Pull Request is opened.
@@ -63,7 +63,8 @@ jobs:
       # Finally, we compile the sketch, using the FQBN that was set
       # in the build matrix.
       - name: Compile Sketch
-        run: arduino-cli compile --fqbn ${{ matrix.fqbn }} ./examples/Simple
-        run: arduino-cli compile --fqbn ${{ matrix.fqbn }} ./examples/IntMath
-        run: arduino-cli compile --fqbn ${{ matrix.fqbn }} ./examples/ESP
+        run: |
+        arduino-cli compile --fqbn ${{ matrix.fqbn }} ./examples/Simple
+        arduino-cli compile --fqbn ${{ matrix.fqbn }} ./examples/IntMath
+        arduino-cli compile --fqbn ${{ matrix.fqbn }} ./examples/ESP
 
