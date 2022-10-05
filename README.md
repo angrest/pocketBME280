@@ -12,7 +12,7 @@ The library implements an on-demand measurement using the "forced mode" (section
 - after about 10ms, the measurement is finished and the sensor goes back in sleep mode automatically
 - until next the next measurement is finished, the data can be read
 
-To calculate temperature, pressure and humidity from the raw sensor data the 32 bit algorithm given by Bosch in the data sheet is implemented. To save energy, no oversampling ("single") is used.
+To calculate temperature, pressure and humidity from the raw sensor data the 32bit algorithm given by Bosch in the data sheet is implemented. For energy saving, no oversampling ("single") is used as recommended for weather monitoring.
 
 ## Programming
 The library provides the functions
@@ -24,7 +24,7 @@ The library provides the functions
 6. `int32_t getTemperature()` returns the temperature in units of 0.01 DegC. An output value of "5123" equals to 51.23 DegC
 7. `uint32_t getPressure()`returns the pressure in Pa. An output value of "96386" equals to 96386 Pa (or 963.86 hPa)
 8. `uint32_t getHumidity()` returns the humidity in Q22.10 format (22 integer and 10 fractional bits). An output value of “47445” equals to 47445/1024 = 46. 333 %RH
-The values for temperature, pressure and humidity are only read from the sensor once per measurement. Thus, subsequent calls to `getTemperature()` or the equivalents will return the same value until a new measurement is started. As for pressure and humidity calculations the temperature value is needed, `getTemperature()` should be called first (however, the library internally keeps track and sorts that out should you call the `get*()`-functions in a different order).
+The values for temperature, pressure and humidity are only read from the sensor once per measurement. Thus, subsequent calls to `getTemperature()` or the equivalents will return the identical values until a new measurement is started. As for pressure and humidity calculations the temperature value is needed, `getTemperature()` should be called first (however, the library internally keeps track and calculates the corresponding temperature in case you call the `get*()`-functions in a different order).
 
 A typical measurement in the `loop()` would look like this (the complete sketch is in the [example folder](examples/Simple/Simple.ino)):
 ```
@@ -54,5 +54,5 @@ void loop() {
 
 **Important:** 
 - The sensor will actually need a few moments before `isMeasuring()` returns `true`. In the above example, the meassage is printed once on an Arduino Pro Mini. On other boards your mileage may vary.
-- If you call the `get*()`-functions before the measurement is finished, the sensor will return the data from the last previously finished measurement. This may or may not be important, depending on the time between subsequent measurements.
+- If you call the `get*()`-functions before the measurement is finished, the sensor (and the thus the `get*()`-functions) will return the data from the last previously finished measurement. This may or may not be important, depending on the time between subsequent measurements.
 - `get*()` will return the same value until the next time `startMeasurement()` is called (and the measurement is finished!).
