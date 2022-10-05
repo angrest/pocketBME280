@@ -11,8 +11,15 @@
 #include <pocketBME280.h>
 
 pocketBME280 mySensor;
-TwoWire myWire;   // not necessary, just to show usage
 
+// This is not necessary here, just to show the usage
+#if defined(ESP32)
+TwoWire myWire = TwoWire(0);
+#elif defined(ESP8266)
+TwoWire myWire = TwoWire();
+#else
+TwoWire myWire;
+#endif
 
 void setup() {
   Serial.begin(115200);
