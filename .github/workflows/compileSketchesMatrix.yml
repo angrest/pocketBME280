@@ -64,7 +64,7 @@ jobs:
       # in the build matrix.
       - name: Compile Sketch
         run: |
-        arduino-cli compile --fqbn ${{ matrix.fqbn }} ./examples/Simple
-        arduino-cli compile --fqbn ${{ matrix.fqbn }} ./examples/IntMath
-        arduino-cli compile --fqbn ${{ matrix.fqbn }} ./examples/ESP
+          arduino-cli compile --fqbn ${{ matrix.fqbn }} ./examples/Simple
+          arduino-cli compile --fqbn ${{ matrix.fqbn }} ./examples/IntMath
+          arduino-cli compile --fqbn ${{ matrix.fqbn }} ./examples/ESP
 
