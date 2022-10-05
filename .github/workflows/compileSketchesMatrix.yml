@@ -1,5 +1,5 @@
 # This is the name of the workflow, visible on GitHub UI.
-name: Test
+name: run tests
 
 # Here we tell GitHub to run the workflow when a commit
 # is pushed or a Pull Request is opened.
@@ -27,18 +27,17 @@ jobs:
         # needed to compile against a certain FQBN, at that point the
         # following `include` section will be useless.
         include:
-          # This works like this: when the platform is "arduino:samd", the
-          # variable `fqbn` is set to "arduino:samd:nano_33_iot".
+          # This works like this: when the platform is "arduino:avr", the
+          # variable `fqbn` is set to "arduino:avr:uno".
           - arduino-platform: "arduino:avr"
             fqbn: "arduino:avr:uno"
-            # this does not contain the boards we use, but how to make a parameter in the matrix step optional?
-            source-url: https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+            additional-options: ""
           - arduino-platform: "esp32:esp32"
             fqbn: "esp32:esp32:esp32s3"
-            source-url: https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+            additional-options: "--additional-urls https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json"
           - arduino-platform: "ATTinyCore:avr"
             fqbn: "ATTinyCore:avr:attinyx5"
-            source-url: http://drazzy.com/package_drazzy.com_index.json
+            additional-options: "--additional-urls http://drazzy.com/package_drazzy.com_index.json"
 
     # This is the platform GitHub will use to run our workflow
     runs-on: ubuntu-latest
@@ -64,7 +63,7 @@ jobs:
       # dynamically by the build matrix.
       - name: Install platform
         run: |
-          arduino-cli core install ${{ matrix.arduino-platform }} --additional-urls ${{ matrix.source-url }}
+          arduino-cli core install ${{ matrix.arduino-platform }}  ${{ matrix.additional-options }}
           arduino-cli core update-index
 
       # Finally, we compile the sketch, using the FQBN that was set
