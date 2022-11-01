@@ -31,13 +31,16 @@ jobs:
           # variable `fqbn` is set to "arduino:avr:uno".
           - arduino-platform: "arduino:avr"
             fqbn: "arduino:avr:uno"
+            board_manager_url: ""
             additional-options: ""
           - arduino-platform: "esp32:esp32"
             fqbn: "esp32:esp32:esp32s3"
-            additional-options: "--additional-urls https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json"
+            board_manager_url: "https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json"
+            additional-options: "--additional-urls"
           - arduino-platform: "ATTinyCore:avr"
             fqbn: "ATTinyCore:avr:attinyx5"
-            additional-options: "--additional-urls http://drazzy.com/package_drazzy.com_index.json"
+            board_manager_url: "http://drazzy.com/package_drazzy.com_index.json"
+            additional-options: "--additional-urls"
 
     # This is the platform GitHub will use to run our workflow
     runs-on: ubuntu-latest
@@ -64,9 +67,10 @@ jobs:
       - name: Install platform
         run: |
           arduino-cli config init
-          arduino-cli core update-index
-          arduino-cli core upgrade
-          arduino-cli core install ${{ matrix.arduino-platform }}  ${{ matrix.additional-options }}
+          cd ~/.arduino15
+          curl -O ${{ matrix.board_manager_url }}
+          arduino-cli core install ${{ matrix.arduino-platform }}
+          # arduino-cli core install ${{ matrix.arduino-platform }} ${{ matrix.additional-options }} ${{ matrix.board_manager_url }}
 
 
       # Finally, we compile the sketch, using the FQBN that was set
