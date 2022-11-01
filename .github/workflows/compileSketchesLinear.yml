@@ -10,7 +10,7 @@ jobs:
 
     env:
       # Location of the repository relative to the runner workspace
-      REPO_PATH: libraries/pocketBME280
+      REPO_PATH: .
       
     steps:
       # This step makes the contents of the repository available to the workflow
