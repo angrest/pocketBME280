@@ -24,7 +24,7 @@ jobs:
         uses: arduino/compile-sketches@v1
         with:
           libraries: |
-            - source-path: src
+            - source-path: ${{ env.REPO_PATH }}
           sketch-paths: |
             ${{ env.REPO_PATH }}/examples/Simple
             ${{ env.REPO_PATH }}/examples/IntMath
