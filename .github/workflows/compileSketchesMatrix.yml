@@ -69,8 +69,7 @@ jobs:
           arduino-cli config init
           cd ~/.arduino15
           curl -O ${{ matrix.board_manager_url }}
-          arduino-cli core install ${{ matrix.arduino-platform }}
-          # arduino-cli core install ${{ matrix.arduino-platform }} ${{ matrix.additional-options }} ${{ matrix.board_manager_url }}
+          arduino-cli core install ${{ matrix.arduino-platform }} ${{ matrix.additional-options }} ${{ matrix.board_manager_url }}
 
 
       # Finally, we compile the sketch, using the FQBN that was set
