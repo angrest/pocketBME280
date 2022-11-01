@@ -23,7 +23,8 @@ jobs:
       - name: Compile sketches for Arduino
         uses: arduino/compile-sketches@v1
         with:
-          source-path: ${{ env.REPO_PATH }}/src
+          libraries: |
+            - source-path: ${{ env.REPO_PATH }}/src
           sketch-paths: |
             ${{ env.REPO_PATH }}/examples/Simple
             ${{ env.REPO_PATH }}/examples/IntMath
@@ -32,7 +33,8 @@ jobs:
       - name: Compile sketches for ESP32
         uses: arduino/compile-sketches@v1
         with:
-          source-path: ${{ env.REPO_PATH }}/src
+          libraries: |
+            - source-path: ${{ env.REPO_PATH }}/src
           platforms: |
             - name: esp32:esp32
               source-url: https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
@@ -44,7 +46,8 @@ jobs:
       - name: Compile sketches for ATTiny
         uses: arduino/compile-sketches@v1
         with:
-          source-path: ${{ env.REPO_PATH }}/src
+          libraries: |
+            - source-path: ${{ env.REPO_PATH }}/src
           platforms: |
             - name: ATTinyCore:avr
               source-url: http://drazzy.com/package_drazzy.com_index.json
