@@ -25,10 +25,10 @@ jobs:
         with:
           #libraries: |
           #  - source-path: ${{ env.REPO_PATH }}
-          sketch-paths: |
-            ${{ env.REPO_PATH }}/examples/Simple
-            ${{ env.REPO_PATH }}/examples/IntMath
-            ${{ env.REPO_PATH }}/examples/ESP
+          #sketch-paths: |
+          #  ${{ env.REPO_PATH }}/examples/Simple
+          #  ${{ env.REPO_PATH }}/examples/IntMath
+          #  ${{ env.REPO_PATH }}/examples/ESP
       # Second test for ESP specific branches in ESP example
       - name: Compile sketches for ESP32
         uses: arduino/compile-sketches@v1
@@ -40,8 +40,8 @@ jobs:
               source-url: https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
           # Compile target ESP32 dev kit
           fqbn: 'esp32:esp32:esp32s3'
-          sketch-paths: |
-            ${{ env.REPO_PATH }}/examples/ESP
+          #sketch-paths: |
+          #  ${{ env.REPO_PATH }}/examples/ESP
       # Third round of tests for ATTiny
       - name: Compile sketches for ATTiny
         uses: arduino/compile-sketches@v1
@@ -53,6 +53,6 @@ jobs:
               source-url: http://drazzy.com/package_drazzy.com_index.json
           # compile target ATtiny25/45/85 (No bootloader)            
           fqbn: 'ATTinyCore:avr:attinyx5'
-          sketch-paths: |
-            ${{ env.REPO_PATH }}/examples/Simple
-            ${{ env.REPO_PATH }}/examples/IntMath
+          #sketch-paths: |
+          #  ${{ env.REPO_PATH }}/examples/Simple
+          #  ${{ env.REPO_PATH }}/examples/IntMath
