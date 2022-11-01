@@ -1,6 +1,7 @@
 # pocketBME280
 
 [![run tests](https://github.com/angrest/pocketBME280/actions/workflows/compileSketchesMatrix.yml/badge.svg)](https://github.com/angrest/pocketBME280/actions/workflows/compileSketchesMatrix.yml)
+[![Arduino Lint](https://github.com/angrest/pocketBME280/actions/workflows/Arduino%20Lint.yml/badge.svg)](https://github.com/angrest/pocketBME280/actions/workflows/Arduino%20Lint.yml)
 
 ## Description
 This library provides a compact option to read out data from a BME280 sensor via I2C. It is designed to be used for weather monitoring in Arduino projects. To optimize size and compatibility, internal arithmetics is based entirely on 32bit integers. If floating point values are required, they can easily be calculated as shown in the [IntMath example](examples/IntMath/IntMath.ino).
