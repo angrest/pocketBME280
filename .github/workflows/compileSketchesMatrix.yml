@@ -64,10 +64,10 @@ jobs:
       - name: Install platform
         run: |
           arduino-cli config init
-          arduino-cli config dump
-          arduino-cli core install ${{ matrix.arduino-platform }}  ${{ matrix.additional-options }}
           arduino-cli core update-index
           arduino-cli core upgrade
+          arduino-cli core install ${{ matrix.arduino-platform }}  ${{ matrix.additional-options }}
+
 
       # Finally, we compile the sketch, using the FQBN that was set
       # in the build matrix.
