@@ -1,6 +1,6 @@
 # pocketBME280
 
-[![run tests](https://github.com/angrest/pocketBME280/actions/workflows/compileSketchesMatrix.yml/badge.svg)](https://github.com/angrest/pocketBME280/actions/workflows/compileSketchesMatrix.yml)
+[![Tests](https://github.com/angrest/pocketBME280/actions/workflows/compileSketchesMatrix.yml/badge.svg)](https://github.com/angrest/pocketBME280/actions/workflows/compileSketchesMatrix.yml)
 [![Arduino Lint](https://github.com/angrest/pocketBME280/actions/workflows/Arduino%20Lint.yml/badge.svg)](https://github.com/angrest/pocketBME280/actions/workflows/Arduino%20Lint.yml)
 
 ## Description
