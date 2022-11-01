@@ -10,21 +10,21 @@ jobs:
 
     env:
       # Location of the repository relative to the runner workspace
-      REPO_PATH: libraries/pocketBME280
+      #REPO_PATH: libraries/pocketBME280
       
     steps:
       # This step makes the contents of the repository available to the workflow
       - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          path: ${{ env.REPO_PATH }}
+        # with:
+        #  path: ${{ env.REPO_PATH }}
 
       # Standard target Arduino Uno
       - name: Compile sketches for Arduino
         uses: arduino/compile-sketches@v1
         with:
-          libraries: |
-            - source-path: ${{ env.REPO_PATH }}
+          #libraries: |
+          #  - source-path: ${{ env.REPO_PATH }}
           sketch-paths: |
             ${{ env.REPO_PATH }}/examples/Simple
             ${{ env.REPO_PATH }}/examples/IntMath
@@ -33,8 +33,8 @@ jobs:
       - name: Compile sketches for ESP32
         uses: arduino/compile-sketches@v1
         with:
-          libraries: |
-            - source-path: src
+          #libraries: |
+          #  - source-path: src
           platforms: |
             - name: esp32:esp32
               source-url: https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
@@ -46,8 +46,8 @@ jobs:
       - name: Compile sketches for ATTiny
         uses: arduino/compile-sketches@v1
         with:
-          libraries: |
-            - source-path: src
+          #libraries: |
+          #  - source-path: src
           platforms: |
             - name: ATTinyCore:avr
               source-url: http://drazzy.com/package_drazzy.com_index.json
