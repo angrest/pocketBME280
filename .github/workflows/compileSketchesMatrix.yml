@@ -71,7 +71,7 @@ jobs:
         run: |
           arduino-cli config init
           # changed in 0.28.0 - now needs the --additional-urls here as well
-          if ${{ matrix.board_manager_url }}
+          if: ${{ matrix.board_manager_url }}
             arduino-cli config add board_manager.additional_urls ${{ matrix.board_manager_url }}
           arduino-cli core update-index
           ### this is a clumsy workaround to get the installer work correctly by manually downloading the package file 
