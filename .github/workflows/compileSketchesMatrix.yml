@@ -70,11 +70,12 @@ jobs:
       - name: Install platform
         run: |
           arduino-cli config init
-          arduino-cli core update-index
+          # changed in 0.28.0 - now needs the --additional-urls here as well
+          arduino-cli core update-index ${{ matrix.additional-options }} ${{ matrix.board_manager_url }}
           ### this is a clumsy workaround to get the installer work correctly by manually downloading the package file 
           ### bug report https://github.com/arduino/arduino-cli/issues/1959#issue-1431737225
-          cd ~/.arduino15
-          ${{ matrix.curl }} ${{ matrix.board_manager_url }}
+          ## cd ~/.arduino15
+          ## ${{ matrix.curl }} ${{ matrix.board_manager_url }}
           ### end workaround
           arduino-cli core install ${{ matrix.arduino-platform }} ${{ matrix.additional-options }} ${{ matrix.board_manager_url }}
 
