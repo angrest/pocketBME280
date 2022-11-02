@@ -71,13 +71,15 @@ jobs:
         run: |
           arduino-cli config init
           # changed in 0.28.0 - now needs the --additional-urls here as well
-          arduino-cli core update-index ${{ matrix.additional-options }} ${{ matrix.board_manager_url }}
+          if ${{ ${{ matrix.board_manager_url }} != "" }}
+            arduino-cli config add board_manager.additional_urls ${{ matrix.board_manager_url }}
+          arduino-cli core update-index
           ### this is a clumsy workaround to get the installer work correctly by manually downloading the package file 
           ### bug report https://github.com/arduino/arduino-cli/issues/1959#issue-1431737225
           ## cd ~/.arduino15
           ## ${{ matrix.curl }} ${{ matrix.board_manager_url }}
           ### end workaround
-          arduino-cli core install ${{ matrix.arduino-platform }} ${{ matrix.additional-options }} ${{ matrix.board_manager_url }}
+          arduino-cli core install ${{ matrix.arduino-platform }}
 
 
       # Finally, we compile the sketch, using the FQBN that was set
