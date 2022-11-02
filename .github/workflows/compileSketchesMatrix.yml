@@ -32,15 +32,15 @@ jobs:
           - arduino-platform: "arduino:avr"
             fqbn: "arduino:avr:uno"
             board_manager_url: ""
-            addditional_options: ""
+            additional_options: ""
           - arduino-platform: "esp32:esp32"
             fqbn: "esp32:esp32:esp32s3"
             board_manager_url: "https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json"
-            addditional_options: "--additional_urls"
+            additional_options: "--additional_urls"
           - arduino-platform: "ATTinyCore:avr"
             fqbn: "ATTinyCore:avr:attinyx5"
             board_manager_url: "http://drazzy.com/package_drazzy.com_index.json"
-            addditional_options: "--additional_urls"
+            additional_options: "--additional_urls"
 
     # This is the platform GitHub will use to run our workflow
     runs-on: ubuntu-latest
@@ -66,8 +66,8 @@ jobs:
       # dynamically by the build matrix.
       - name: Install platform
         run: |
-          arduino-cli core update-index ${{ addditional_options }}  ${{ matrix.arduino-platform }} ${{ matrix.board_manager_url }}
-          arduino-cli core install ${{ matrix.arduino-platform }} ${{ matrix.board_manager_url }}
+          arduino-cli core update-index ${{ matrix.arduino-platform }} ${{ matrix.addditional_options }} ${{ matrix.board_manager_url }}
+          arduino-cli core install ${{ matrix.arduino-platform }} ${{ matrix.addditional_options }} ${{ matrix.board_manager_url }}
 
       # Finally, we compile the sketch, using the FQBN that was set
       # in the build matrix.
@@ -76,7 +76,7 @@ jobs:
           # Configure Arduino CLI so this repository checked out under the libraries subfolder will be recognized
           ARDUINO_DIRECTORIES_USER: ${{ github.workspace }}
         run: |
-          arduino-cli compile --fqbn ${{ matrix.fqbn }} ${{ matrix.arduino-platform }} ${{ matrix.board_manager_url }} ${{ env.REPO_PATH }}/examples/Simple
-          arduino-cli compile --fqbn ${{ matrix.fqbn }} ${{ matrix.arduino-platform }} ${{ matrix.board_manager_url }} ${{ env.REPO_PATH }}/examples/IntMath
-          arduino-cli compile --fqbn ${{ matrix.fqbn }} ${{ matrix.arduino-platform }} ${{ matrix.board_manager_url }} ${{ env.REPO_PATH }}/examples/ESP
+          arduino-cli compile --fqbn ${{ matrix.fqbn }} ${{ matrix.addditional_options }} ${{ matrix.board_manager_url }} ${{ env.REPO_PATH }}/examples/Simple
+          arduino-cli compile --fqbn ${{ matrix.fqbn }} ${{ matrix.addditional_options }} ${{ matrix.board_manager_url }} ${{ env.REPO_PATH }}/examples/IntMath
+          arduino-cli compile --fqbn ${{ matrix.fqbn }} ${{ matrix.addditional_options }} ${{ matrix.board_manager_url }} ${{ env.REPO_PATH }}/examples/ESP
 
