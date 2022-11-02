@@ -66,8 +66,8 @@ jobs:
       # dynamically by the build matrix.
       - name: Install platform
         run: |
-          arduino-cli core update-index ${{ matrix.addditional_options }} ${{ matrix.board_manager_url }}
-          arduino-cli core install ${{ matrix.arduino-platform }} ${{ matrix.addditional_options }} ${{ matrix.board_manager_url }}
+          arduino-cli core update-index ${{ matrix.additional_options }} ${{ matrix.board_manager_url }}
+          arduino-cli core install ${{ matrix.arduino-platform }} ${{ matrix.additional_options }} ${{ matrix.board_manager_url }}
 
       # Finally, we compile the sketch, using the FQBN that was set
       # in the build matrix.
@@ -76,7 +76,7 @@ jobs:
           # Configure Arduino CLI so this repository checked out under the libraries subfolder will be recognized
           ARDUINO_DIRECTORIES_USER: ${{ github.workspace }}
         run: |
-          arduino-cli compile --fqbn ${{ matrix.fqbn }} ${{ matrix.addditional_options }} ${{ matrix.board_manager_url }} ${{ env.REPO_PATH }}/examples/Simple
-          arduino-cli compile --fqbn ${{ matrix.fqbn }} ${{ matrix.addditional_options }} ${{ matrix.board_manager_url }} ${{ env.REPO_PATH }}/examples/IntMath
-          arduino-cli compile --fqbn ${{ matrix.fqbn }} ${{ matrix.addditional_options }} ${{ matrix.board_manager_url }} ${{ env.REPO_PATH }}/examples/ESP
+          arduino-cli compile --fqbn ${{ matrix.fqbn }} ${{ matrix.additional_options }} ${{ matrix.board_manager_url }} ${{ env.REPO_PATH }}/examples/Simple
+          arduino-cli compile --fqbn ${{ matrix.fqbn }} ${{ matrix.additional_options }} ${{ matrix.board_manager_url }} ${{ env.REPO_PATH }}/examples/IntMath
+          arduino-cli compile --fqbn ${{ matrix.fqbn }} ${{ matrix.additional_options }} ${{ matrix.board_manager_url }} ${{ env.REPO_PATH }}/examples/ESP
 
