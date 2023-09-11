@@ -53,7 +53,7 @@ jobs:
     steps:
       # First of all, we clone the repo using the `checkout` action.
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: ${{ env.REPO_PATH }}
 
